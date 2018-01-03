@@ -45,38 +45,68 @@ mongoose.connect(MONGODB_URI, {
 app.get("/", function(req, res) {
     console.log("route ping");
   // First, we grab the body of the html with request
-  axios.get("https://www.reuters.com/").then(function(response) {
+  axios.get("https://www.nytimes.com/section/world").then(function(response) {
     // Then, we load that into cheerio and save it to $ for a shorthand selector
+//      console.log (response)
     var $ = cheerio.load(response.data);
 
     // Now, we grab every h2 within an article tag, and do the following:
-    $("article").each(function(i, element) {
-      // Save an empty result object
+    $(".story").each(function(i, element) {
+//        console.log(response.data)
+//        console.log(this.children)
+        let myFirstPromise = new Promise((resolve,reject)=>{
+                // Save an empty result objec
       var result = {};
-        console.log(result);
+//      
+        
 
       // Add the text and href of every link, and save them as properties of the result object
       result.title = $(this)
-        .children("h3")
+        .find(".story-body")
+        .find(".headline")
+        .find("a")
         .text();
+            
+   
       result.link = $(this)
-        .children("a")
+        .find(".story-body")
+        .find(".headline")
+        .find("a")
         .attr("href");
+            
+        
       result.summary= $(this)
-        .children("p")
-        .text();
- 
-      // Create a new Article using the `result` object built from scraping
-      db.Article
-        .create(result)
-        .then(function(dbArticle) {
-          // If we were able to successfully scrape and save an Article, send a message to the client
-          res.send("Scrape Complete");
-        })
-        .catch(function(err) {
-          // If an error occurred, send it to the client
-          res.json(err);
+        .find(".story-body")
+        .find(".summary")
+        .text(); 
+         console.log(result)
+        resolve(result);
         });
+        
+        myFirstPromise.then((response)=>{
+            if (response.title !== ""){
+            db.Article.create(response);
+            console.log(response);
+            }
+//         
+        });
+//        res.send("scrape complete");
+        
+//        db.Article
+//      // Create a new Article using the `result` object built from scraping
+//        .create(result) 
+
+        
+     
+//         .then(function(dbArticle) {
+//          // If we were able to successfully scrape and save an Article, send a message to the client
+////          res.send("Scrape Complete");
+
+//        .catch(function(err) {
+//          // If an error occurred, send it to the client
+//          res.json(err);
+//        });
+//     
     });
   });
 });
@@ -90,10 +120,10 @@ app.get("/articles", function(req, res) {
       // If we were able to successfully find Articles, send them back to the client
       res.json(dbArticle);
     })
-    .catch(function(err) {
-      // If an error occurred, send it to the client
-      res.json(err);
-    });
+//    .catch(function(err) {
+//      // If an error occurred, send it to the client
+//      res.json(err);
+//    });
 });
 
 // Route for grabbing a specific Article by id, populate it with it's note
@@ -107,10 +137,10 @@ app.get("/articles/:id", function(req, res) {
       // If we were able to successfully find an Article with the given id, send it back to the client
       res.json(dbArticle);
     })
-    .catch(function(err) {
-      // If an error occurred, send it to the client
-      res.json(err);
-    });
+//    .catch(function(err) {
+//      // If an error occurred, send it to the client
+//      res.json(err);
+//    });
 });
 
 // Route for saving/updating an Article's associated Note
