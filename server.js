@@ -159,7 +159,7 @@ app.post("/articles/:id", function(req, res) {
     });
 });
 
-app.delete("/articles/:id/delete",function (req,res){
+app.delete("/delete",function (req,res){
     console.log(req.body.thisId)
    db.Note
     .findByIdAndRemove(req.body.thisId, (err,user) => {  

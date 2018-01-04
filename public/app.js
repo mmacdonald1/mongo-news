@@ -79,8 +79,9 @@ $(document).on("click", "#deletenote", function() {
   var thisId = $(this).attr("data-id");
     console.log(thisId);
     
-    $.ajax("/articles/" + thisId + "/delete", {
+    $.ajax("/delete", {
       type: "DELETE",
+      data:thisId,
     }).then(
       function() {
         console.log("deleted note", thisId);
@@ -88,23 +89,4 @@ $(document).on("click", "#deletenote", function() {
         location.reload();
       });
 
-  // Run a POST request to change the note, using what's entered in the inputs
-//  $.ajax({
-//    method: "DELETE",
-//    url: "/delete",
-//    data: thisId
-//  })
-//    // With that done
-//    .done(function(data) {
-//      // Log the response
-//      console.log(data);
-//      // Empty the notes section
-//      $("#notes").empty();
-//      
-//      window.location.reload();
-//    });
-
-  // Also, remove the values entered in the input and textarea for note entry
-//  $("#titleinput").val("");
-//  $("#bodyinput").val("");
 });
