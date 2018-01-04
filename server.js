@@ -85,7 +85,18 @@ app.get("/", function(req, res) {
         
         myFirstPromise.then((response)=>{
             if (response.title !== ""){
-            db.Article.create(response);
+            db.Article.findOneAndUpdate(
+            { title: response.title },
+            response,
+            { upsert: true })
+            .then(update => {
+              if(update) {
+                console.log('article in db');
+              } else {
+                console.log('new article');
+              };
+            })
+            console.log("-----------------")
             console.log(response);
             }        
         });
