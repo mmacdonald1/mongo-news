@@ -31,6 +31,8 @@ $(document).on("click", "p", function() {
       $("#notes").append("<textarea id='bodyinput' name='body'></textarea>");
       // A button to submit a new note, with the id of the article saved to it
       $("#notes").append("<button data-id='" + data._id + "' id='savenote'>Save Note</button>");
+      //A button to delete a note
+      $("#notes").append("<button data-id='" + data._id + "' id='deletenote'>Delete Note</button>");
 
       // If there's a note in the article
       if (data.note) {
@@ -69,4 +71,40 @@ $(document).on("click", "#savenote", function() {
   // Also, remove the values entered in the input and textarea for note entry
   $("#titleinput").val("");
   $("#bodyinput").val("");
+});
+
+// When you click the savenote button
+$(document).on("click", "#deletenote", function() {
+  // Grab the id associated with the article from the submit button
+  var thisId = $(this).attr("data-id");
+    console.log(thisId);
+    
+    $.ajax("/articles/" + thisId + "/delete", {
+      type: "DELETE",
+    }).then(
+      function() {
+        console.log("deleted note", thisId);
+        // Reload the page to get the updated list
+        location.reload();
+      });
+
+  // Run a POST request to change the note, using what's entered in the inputs
+//  $.ajax({
+//    method: "DELETE",
+//    url: "/delete",
+//    data: thisId
+//  })
+//    // With that done
+//    .done(function(data) {
+//      // Log the response
+//      console.log(data);
+//      // Empty the notes section
+//      $("#notes").empty();
+//      
+//      window.location.reload();
+//    });
+
+  // Also, remove the values entered in the input and textarea for note entry
+//  $("#titleinput").val("");
+//  $("#bodyinput").val("");
 });
