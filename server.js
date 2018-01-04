@@ -34,7 +34,7 @@ app.use(express.static("public"));
 // Set mongoose to leverage built in JavaScript ES6 Promises
 // Connect to the Mongo DB
 mongoose.Promise = Promise;
-var MONGODB_URI = process.env.MONGODB_URI|| "mongodb://localhost/mongoHeadlines";
+var MONGODB_URI = process.env.MONGODB_URI|| "mongodb://heroku_pjn0clhv:ulvei5a0bhpc4h2k0tkcltqkf6@ds237717.mlab.com:37717/heroku_pjn0clhv";
 mongoose.connect(MONGODB_URI, {
   useMongoClient: true
 });
@@ -87,27 +87,11 @@ app.get("/", function(req, res) {
             if (response.title !== ""){
             db.Article.create(response);
             console.log(response);
-            }
-//         
+            }        
         });
-//        res.send("scrape complete");
-        
-//        db.Article
-//      // Create a new Article using the `result` object built from scraping
-//        .create(result) 
-
-        
-     
-//         .then(function(dbArticle) {
-//          // If we were able to successfully scrape and save an Article, send a message to the client
-////          res.send("Scrape Complete");
-
-//        .catch(function(err) {
-//          // If an error occurred, send it to the client
-//          res.json(err);
-//        });
-//     
+   
     });
+      res.render("index");
   });
 });
 
