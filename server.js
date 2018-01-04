@@ -35,9 +35,7 @@ app.use(express.static("public"));
 // Connect to the Mongo DB
 mongoose.Promise = Promise;
 var MONGODB_URI = process.env.MONGODB_URI|| "mongodb://heroku_pjn0clhv:ulvei5a0bhpc4h2k0tkcltqkf6@ds237717.mlab.com:37717/heroku_pjn0clhv";
-mongoose.connect(MONGODB_URI, {
-  useMongoClient: true
-});
+mongoose.connect(MONGODB_URI);
 
 // Routes
 
