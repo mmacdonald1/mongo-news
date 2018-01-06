@@ -41,7 +41,7 @@ mongoose.connect(MONGODB_URI);
 
 // A GET route for scraping the echojs website
 app.get("/", function(req, res) {
-    console.log("route ping");
+    // console.log("route ping");
   // First, we grab the body of the html with request
   axios.get("https://www.nytimes.com/section/world").then(function(response) {
     // Then, we load that into cheerio and save it to $ for a shorthand selector
@@ -55,8 +55,8 @@ app.get("/", function(req, res) {
         let myFirstPromise = new Promise((resolve,reject)=>{
                 // Save an empty result objec
       var result = {};
-//      
-        
+//
+
 
       // Add the text and href of every link, and save them as properties of the result object
       result.title = $(this)
@@ -64,23 +64,23 @@ app.get("/", function(req, res) {
         .find(".headline")
         .find("a")
         .text();
-            
-   
+
+
       result.link = $(this)
         .find(".story-body")
         .find(".headline")
         .find("a")
         .attr("href");
-            
-        
+
+
       result.summary= $(this)
         .find(".story-body")
         .find(".summary")
-        .text(); 
+        .text();
          console.log(result)
         resolve(result);
         });
-        
+
         myFirstPromise.then((response)=>{
             if (response.title !== ""){
             db.Article.findOneAndUpdate(
@@ -96,9 +96,9 @@ app.get("/", function(req, res) {
             })
             console.log("-----------------")
             console.log(response);
-            }        
+            }
         });
-   
+
     });
       res.render("index");
   });
@@ -160,7 +160,7 @@ app.post("/articles/:id", function(req, res) {
 app.delete("/delete",function (req,res){
     console.log(req.body.thisId)
    db.Note
-    .findByIdAndRemove(req.body.thisId, (err,user) => {  
+    .findByIdAndRemove(req.body.thisId, (err,user) => {
   if (err) {
       throw err;
     }
